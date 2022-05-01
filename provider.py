@@ -17,17 +17,17 @@ class ProviderYahoo(ScraperPageArticle):
             3: "Bloomberg",
             4: "Financial Times",
             5: "Fortune",
-            6: "Fx Empire",
+            6: "FX Empire",
             7: "Investor's Business Daily",
             8: "MarketWatch",
-            9: "Morning Research",
+            9: "Morningstar Research",
             10: "Quartz",
             11: "Reuters",
             12: "SmartAsset",
-            13: "Tech Crunch",
+            13: "TechCrunch",
             14: "TipRanks",
             15: "USA TODAY",
-            16: "Yahoo",
+            16: "Yahoo Finance",
             17: "Yahoo Money"
         }
 
