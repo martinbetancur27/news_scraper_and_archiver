@@ -56,7 +56,7 @@ def main():
                 url_full = HOME_URL + url
                 #The href does not have the initial extension (HOME_URL)
 
-                print(f'\n {url_full}') 
+                #print(f'\n {url_full}') 
                 #Test: print link in console
 
                 provider_yahoo.scrape_notice(url_full)
