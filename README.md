@@ -1,4 +1,4 @@
-# Vendor news scraper and archiver on yahoo news: Bloomberg, Reuters, Fortune and many more
+# Vendor news scraper and archiver on yahoo news: Bloomberg, Reuters and many more. Skills: XPATH, Python, Selenium, Requests, Logic and POO
 
 You have a list where you can select the Yahoo provider; the program will select the news, scrape it and save it locally.
 
