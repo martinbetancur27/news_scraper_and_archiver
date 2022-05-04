@@ -20,7 +20,7 @@ class BeautifulSoupPersonalized():
         (With self.soup you will have ways to navigate that data structure)'''
 
         try:
-            self.soup = BeautifulSoup(page_source, 'html.parser')
+            self.__soup = BeautifulSoup(page_source, 'html.parser')
         except:
             print("Error connecting to BeautifulSoup")
 
@@ -28,21 +28,21 @@ class BeautifulSoupPersonalized():
     #the following methods are for calling BeautifulSoup methods
     def bs_find_all(self, *args, **kwargs):
         try:
-            return self.soup.find_all(*args, **kwargs)
+            return self.__soup.find_all(*args, **kwargs)
         except:
             print("(bs_find_all) Error performing search ", args)
         
 
     def bs_find(self, *args, **kwargs):
         try:
-            return self.soup.find(*args, **kwargs)
+            return self.__soup.find(*args, **kwargs)
         except:
             print("(bs_find) Error performing search ", args)
     
 
     def bs_find_all_get_text(self, *args, **kwargs):
         try:
-            texts = self.soup.find_all(*args, **kwargs)
+            texts = self.__soup.find_all(*args, **kwargs)
             list_texts = []
             for text in texts:
                 list_texts.append(text.get_text())
@@ -51,13 +51,14 @@ class BeautifulSoupPersonalized():
         except:
             print("(bs_find_all_get_text) Error performing search ", args)
 
+
     #The following methods are to make the search more natural
     def get_all_tag(self, tag):
         #Receive label
         #Filter by tag
         #return search
         try:
-            return self.soup.find_all(tag)
+            return self.__soup.find_all(tag)
         except:
             print("Error when scraping with the tag ", tag)
 
@@ -74,7 +75,7 @@ class BeautifulSoupPersonalized():
             tag = search[0]
             tag_attribute = search[1]
 
-            scraping_tag = self.soup.find_all(tag)
+            scraping_tag = self.__soup.find_all(tag)
             list_attribute = []
             
             for elem in scraping_tag:
@@ -91,7 +92,7 @@ class BeautifulSoupPersonalized():
         #Utiliza la clase etree para convertir el HTML y poder filtrar por la expresion
         #Retorna la busqueda
         try:
-            dom = etree.HTML(str(self.soup))
+            dom = etree.HTML(str(self.__soup))
             return dom.xpath(var_xpath)
         except:
             print("Error performing XPATH lookup ", var_xpath)
@@ -104,7 +105,7 @@ class BeautifulSoupPersonalized():
         #Return list with content
 
         try:
-            texts = self.soup.find_all(tag)
+            texts = self.__soup.find_all(tag)
             list_texts = []
             for text in texts:
                 list_texts.append(text.get_text())

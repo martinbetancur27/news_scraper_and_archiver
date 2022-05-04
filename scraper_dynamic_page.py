@@ -13,11 +13,15 @@ class ScraperDynamicPage(BeautifulSoupPersonalized):
             #Inherit methods for lookup
 
     def __init__(self, page_url):
-        
-        page_result = self.scraper_dynamic_page(page_url)
-        #super().__init__ Initialize the constructor of the superclass
-        super().__init__(page_result)
 
+        #connect: connection validation
+        self.__connect = False
+        __page_result = self.__scraper_dynamic_page(page_url)
+
+        if(self.__connect):
+            #super().__init__ Initialize the constructor of the superclass
+            super().__init__(__page_result)
+        
     
     def __connect_browser(self, page):
         
@@ -35,18 +39,21 @@ class ScraperDynamicPage(BeautifulSoupPersonalized):
 
         try:
             #Hide the browser
-            self.options = ChromeOptions()
-            self.options.headless = True
+            self.__options = ChromeOptions()
+            self.__options.headless = True
             #Hide unnecessary logs from the user
-            self.options.add_argument("--log-level=3")
+            self.__options.add_argument("--log-level=3")
 
-            self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=self.options)
-            self.driver.get(page)
+            self.__driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=self.__options)
+            self.__driver.get(page)
+            #if the above piece of code doesn't break set the connection to true
+            self.__connect = True
         except:
-            print("Error connecting browser driver")
+            print("Error connecting browser driver. Check the url\n")
+            self.__connect = False
 
 
-    def scraper_dynamic_page(self, page):
+    def __scraper_dynamic_page(self, page):
         #Receive Url
         #execute method __connect_browser()
             #Get the page through the Selenium driver.
@@ -59,13 +66,15 @@ class ScraperDynamicPage(BeautifulSoupPersonalized):
          #Does not return any value
         try:
             self.__connect_browser(page)
-            self.__slow_scroll()     
-            body = self.driver.execute_script("return document.body")
-            page_source = body.get_attribute('innerHTML') 
-            self.driver.quit()
-            return page_source
+
+            if (self.__connect):
+                self.__slow_scroll()     
+                body = self.__driver.execute_script("return document.body")
+                page_source = body.get_attribute('innerHTML') 
+                self.__driver.quit()
+                return page_source
         except:
-            print("Error when performing scraping on dynamic web. check your url")
+            print("Error when performing scraping on dynamic web")
 
     
     def __slow_scroll(self):
@@ -83,14 +92,14 @@ class ScraperDynamicPage(BeautifulSoupPersonalized):
             
             #CODE SOURCE: https://blogvisionarios.com/e-learning/articulos-data/web-scraping-de-paginas-dinamicas-con-selenium-python-y-beautifulsoup-en-azure-data-studio/
             print("Please wait... The page can be very long")
-            self.driver.maximize_window()
+            self.__driver.maximize_window()
             time.sleep(1)
             #We make a slow scroll to the end of the page
             iter=1
             while True:
-                scrollHeight = self.driver.execute_script("return document.documentElement.scrollHeight")
+                scrollHeight = self.__driver.execute_script("return document.documentElement.scrollHeight")
                 Height=250*iter
-                self.driver.execute_script("window.scrollTo(0, " + str(Height) + ");")
+                self.__driver.execute_script("window.scrollTo(0, " + str(Height) + ");")
                 if Height > scrollHeight:
                     print("Scroll finished, please wait")
                     break
@@ -98,3 +107,7 @@ class ScraperDynamicPage(BeautifulSoupPersonalized):
                 iter+=1
         except:
             print("Error when performing dynamic scroll")
+
+
+    def getConnect(self):
+        return self.__connect

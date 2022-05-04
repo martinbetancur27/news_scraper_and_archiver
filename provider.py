@@ -5,13 +5,13 @@ class ProviderYahoo(ScraperPageArticle):
     #Inherit from class 'ScraperPageArticle'
 
     #XPATH to extract the information from each news page. class attributes
-    XPATH_TITLE = '//header[@class="caas-title-wrapper"]//text()'
-    XPATH_TIME = '//time[@class]/text()'
-    XPATH_AUTHOR = '//span[@class="caas-attr-provider"]/text()'
-    XPATH_BODY = '//div[@class="caas-body"]/descendant::*/text()'
+    __XPATH_TITLE = '//header[@class="caas-title-wrapper"]//text()'
+    __XPATH_TIME = '//time[@class]/text()'
+    __XPATH_AUTHOR = '//span[@class="caas-attr-provider"]/text()'
+    __XPATH_BODY = '//div[@class="caas-body"]/descendant::*/text()'
     
     #Yahoo Top Providers List
-    PROVIDERS = {
+    __PROVIDERS = {
             1: "Argus Research",
             2: "Barrons.com",
             3: "Bloomberg",
@@ -33,17 +33,17 @@ class ProviderYahoo(ScraperPageArticle):
 
     def __init__(self):
 
-        super().__init__(ProviderYahoo.XPATH_TITLE, ProviderYahoo.XPATH_TIME, ProviderYahoo.XPATH_AUTHOR, ProviderYahoo.XPATH_BODY)
+        super().__init__(ProviderYahoo.__XPATH_TITLE, ProviderYahoo.__XPATH_TIME, ProviderYahoo.__XPATH_AUTHOR, ProviderYahoo.__XPATH_BODY)
         ##Initialize the constructor of the superclass. XPATH to extract the information are sent as parameters
 
         #When the class is called a provider is chosen
-        self.provider_name = self.choose_provider()
+        self.__provider_name = self.choose_provider()
 
 
     #Overload print method. print(this object) will print the provider name
     def __str__(self):
 
-        return str(self.provider_name)
+        return str(self.__provider_name)
 
 
     def choose_provider(self):
@@ -53,7 +53,7 @@ class ProviderYahoo(ScraperPageArticle):
         #Print in a format with good user experience
         print ("{:<5} {:<5}".format('Num', 'Provider'))
 
-        for key, value in ProviderYahoo.PROVIDERS.items():
+        for key, value in ProviderYahoo.__PROVIDERS.items():
 
             print ("{:<5} {:<5}".format(key, value))
             
@@ -71,20 +71,20 @@ class ProviderYahoo(ScraperPageArticle):
                 continue
                 
             #Validate the value entered by the user
-            if  (choice > 0 and choice <= len(ProviderYahoo.PROVIDERS)):
+            if  (choice > 0 and choice <= len(ProviderYahoo.__PROVIDERS)):
                 #break the while loop
                 break
             else:
                 fail_user = True
             
-        return ProviderYahoo.PROVIDERS.get(choice)
+        return ProviderYahoo.__PROVIDERS.get(choice)
 
 
     def get_xpath_provider_home_struc1(self):
         #Return the XPATH of your structure on the home page
-        return '//a[./div/div[2]/text()="' + self.provider_name + '"]/@href'
+        return '//a[./div/div[2]/text()="' + self.__provider_name + '"]/@href'
 
     
     def get_xpath_provider_home_struc2(self):
         #Return the XPATH of your structure on the home page
-        return '//div[contains(@class,"C(#959595)") and ./span[1][text()="' + self.provider_name + '"]]/../h3//a/@href'
+        return '//div[contains(@class,"C(#959595)") and ./span[1][text()="' + self.__provider_name + '"]]/../h3//a/@href'
