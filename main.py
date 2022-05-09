@@ -19,6 +19,25 @@ def create_folder(name_provider):
 
     return root_folder
 
+
+def is_scraping_prohibited(url):
+    #robots.txt
+    forbidden_scraper = ['/r/', '/_finance_doubledown/', '/nel_ms/', '/caas/', '/__rapidworker-1.2.js', '/__blank', '/_td_api', '/_remote', '/m/']
+    word_split = ""
+    count = 0
+
+    for letter in url:
+
+        word_split += letter
+        if letter == '/' and count != 0:
+            break
+        count =+ 1
+
+    if word_split in forbidden_scraper:
+        return True
+    else:
+        return False
+        
         
 def main():
 
@@ -46,25 +65,30 @@ def main():
             
             for url in result_scrape:
 
-                if(url[0:6] != "https:" and url[0:3] != "/m/" and url != '/news/'):
+                if url[:6] != "https:" and url != '/news/':
                     #Prohibit non-news structures (https and /news/)
                     #Ban those that do not allow scraping (/m/)
                     
-                    #Structure in this position to avoid creating empty folders
-                    if enable_folder_creation:
-                        root_folder = create_folder(provider_yahoo)
-                        enable_folder_creation = False
+                    if is_scraping_prohibited(url):
+                    
+                        print(f'Prohibited content. Check the robots.txt\n{url} ')
+                        
+                    else:
+                        #Structure in this position to avoid creating empty folders
+                        if enable_folder_creation:
+                            root_folder = create_folder(provider_yahoo)
+                            enable_folder_creation = False
 
-                    url_full = HOME_URL + url
-                    #The href does not have the initial extension (HOME_URL)
+                        url_full = HOME_URL + url
+                        #The href does not have the initial extension (HOME_URL)
 
-                    #print(f'\n {url_full}') 
-                    #Test: print link in console
+                        #print(f'\n {url_full}') 
+                        #Test: print link in console
 
-                    provider_yahoo.scrape_notice(url_full)
-                    #scrape news
-                    provider_yahoo.save_news_to_file(root_folder)
-                    #save news
+                        provider_yahoo.scrape_notice(url_full)
+                        #scrape news
+                        provider_yahoo.save_news_to_file(root_folder)
+                        #save news
             
             #print name provider
             print(f"\n{provider_yahoo}... Search finished")
