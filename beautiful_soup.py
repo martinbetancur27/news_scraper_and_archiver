@@ -5,7 +5,7 @@ class BeautifulSoupPersonalized():
 
     def __init__(self, page_source):
         #receives an http response. Content of a page
-        self.__beautifulsoup_connect(page_source)
+        self.__soup = self.__beautifulsoup_connect(page_source)
         
 
     def __beautifulsoup_connect(self, page_source):
@@ -20,7 +20,8 @@ class BeautifulSoupPersonalized():
         (With self.soup you will have ways to navigate that data structure)'''
 
         try:
-            self.__soup = BeautifulSoup(page_source, 'html.parser')
+            soup = BeautifulSoup(page_source, 'html.parser')
+            return soup
         except:
             print("Error connecting to BeautifulSoup")
 

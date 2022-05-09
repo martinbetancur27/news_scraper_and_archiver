@@ -14,19 +14,22 @@ class ScraperDynamicPage(BeautifulSoupPersonalized):
 
     def __init__(self, page_url):
 
+        self.page_url = page_url
         #connect: connection validation
         self.__connect = False
-        __page_result = self.__scraper_dynamic_page(page_url)
+
+        self.__browser_driver_by_selenium = self.__connect_browser()
+        page_result = self.scraper_dynamic_page()
 
         if(self.__connect):
             #super().__init__ Initialize the constructor of the superclass
-            super().__init__(__page_result)
+            super().__init__(page_result)
         
     
-    def __connect_browser(self, page):
+    def __connect_browser(self):
         
         #It makes the connection with the Chrome webdriver.
-        #Does not return any value
+        #Return driver Selenium
 
         '''ChromeDriver is a separate executable that Selenium WebDriver uses to control Chrome.
         It is maintained by the Chromium team with the help of WebDriver contributors.
@@ -39,24 +42,25 @@ class ScraperDynamicPage(BeautifulSoupPersonalized):
 
         try:
             #Hide the browser
-            self.__options = ChromeOptions()
-            self.__options.headless = True
+            my_options = ChromeOptions()
+            my_options.headless = True
             #Hide unnecessary logs from the user
-            self.__options.add_argument("--log-level=3")
+            my_options.add_argument("--log-level=3")
 
-            self.__driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=self.__options)
-            self.__driver.get(page)
+            #Each WebDriver instance provides automated control over a browser session.
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=my_options)
+            driver.get(self.page_url)
             #if the above piece of code doesn't break set the connection to true
             self.__connect = True
+            return driver
+
         except:
             print("Error connecting browser driver. Check the url\n")
             self.__connect = False
 
 
-    def __scraper_dynamic_page(self, page):
+    def scraper_dynamic_page(self):
         #Receive Url
-        #execute method __connect_browser()
-            #Get the page through the Selenium driver.
             #Make scroll 'infinite' and with pause time for
             #allow all content to be loaded.
             #Synchronously run JavaScript in the current window/frame
@@ -65,13 +69,12 @@ class ScraperDynamicPage(BeautifulSoupPersonalized):
             #Exit the controller and close all associated windows.
          #Does not return any value
         try:
-            self.__connect_browser(page)
 
             if (self.__connect):
                 self.__slow_scroll()     
-                body = self.__driver.execute_script("return document.body")
+                body = self.__browser_driver_by_selenium.execute_script("return document.body")
                 page_source = body.get_attribute('innerHTML') 
-                self.__driver.quit()
+                self.__browser_driver_by_selenium.quit()
                 return page_source
         except:
             print("Error when performing scraping on dynamic web")
@@ -92,19 +95,19 @@ class ScraperDynamicPage(BeautifulSoupPersonalized):
             
             #CODE SOURCE: https://blogvisionarios.com/e-learning/articulos-data/web-scraping-de-paginas-dinamicas-con-selenium-python-y-beautifulsoup-en-azure-data-studio/
             print("Please wait... The page can be very long")
-            self.__driver.maximize_window()
+            self.__browser_driver_by_selenium.maximize_window()
             time.sleep(1)
             #We make a slow scroll to the end of the page
-            iter=1
+            iter = 1
             while True:
-                scrollHeight = self.__driver.execute_script("return document.documentElement.scrollHeight")
-                Height=250*iter
-                self.__driver.execute_script("window.scrollTo(0, " + str(Height) + ");")
+                scrollHeight = self.__browser_driver_by_selenium.execute_script("return document.documentElement.scrollHeight")
+                Height = 250 * iter
+                self.__browser_driver_by_selenium.execute_script("window.scrollTo(0, " + str(Height) + ");")
                 if Height > scrollHeight:
                     print("Scroll finished, please wait")
                     break
                 time.sleep(1)
-                iter+=1
+                iter += 1
         except:
             print("Error when performing dynamic scroll")
 
