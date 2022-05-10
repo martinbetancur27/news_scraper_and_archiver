@@ -18,25 +18,6 @@ def create_folder(name_provider):
         os.mkdir(f'{root_folder}')
 
     return root_folder
-
-
-def is_scraping_prohibited(url):
-    #robots.txt
-    forbidden_scraper = ['/r/', '/_finance_doubledown/', '/nel_ms/', '/caas/', '/__rapidworker-1.2.js', '/__blank', '/_td_api', '/_remote', '/m/']
-    word_split = ""
-    count = 0
-
-    for letter in url:
-
-        word_split += letter
-        if letter == '/' and count != 0:
-            break
-        count =+ 1
-
-    if word_split in forbidden_scraper:
-        return True
-    else:
-        return False
         
         
 def main():
@@ -67,9 +48,8 @@ def main():
 
                 if url[:6] != "https:" and url != '/news/':
                     #Prohibit non-news structures (https and /news/)
-                    #Ban those that do not allow scraping (/m/)
-                    
-                    if is_scraping_prohibited(url):
+                                        
+                    if provider_yahoo.is_scraping_prohibited(url):
                     
                         print(f'Prohibited content. Check the robots.txt\n{url} ')
                         

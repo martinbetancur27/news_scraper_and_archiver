@@ -88,3 +88,20 @@ class ProviderYahoo(ScraperPageArticle):
     def get_xpath_provider_home_struc2(self):
         #Return the XPATH of your structure on the home page
         return '//div[contains(@class,"C(#959595)") and ./span[1][text()="' + self.__provider_name + '"]]/../h3//a/@href'
+
+    
+    def is_scraping_prohibited(self, url):
+        #robots.txt
+        forbidden_scraper = ['/r/', '/_finance_doubledown/', '/nel_ms/', '/caas/', '/__rapidworker-1.2.js', '/__blank', '/_td_api', '/_remote', '/m/']
+        initial_url = ""
+
+        for letter in url:
+
+            initial_url += letter
+            if letter == '/' and len(initial_url) > 1:
+                break
+
+        if initial_url in forbidden_scraper:
+            return True
+        else:
+            return False
