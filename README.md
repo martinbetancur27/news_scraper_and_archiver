@@ -1,6 +1,9 @@
 # Vendor news scraper and archiver on yahoo news: Bloomberg, Reuters and many more. Skills: XPATH, Python, Selenium, Requests, Logic and POO
 
-You have a list where you can select the Yahoo provider; the program will select the news, scrape it and save it locally.
+## Note
+This code needs to be refactored as it was done in the repository: python_scraping_selenium_beautifulsoup_requests, repository that was taken as the base for this project.
+
+## You have a list where you can select the Yahoo provider; the program will select the news, scrape it and save it locally.
 
 Benefits::
 =============
